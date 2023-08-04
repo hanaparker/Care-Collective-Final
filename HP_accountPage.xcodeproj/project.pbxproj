@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F1A065732AED71120060E4E0 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A065722AED71120060E4E0 /* File.swift */; };
+		F1A065752AEDE7E80060E4E0 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A065742AEDE7E80060E4E0 /* InfoView.swift */; };
+		F1A065772AEE00EB0060E4E0 /* hoursLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A065762AEE00EB0060E4E0 /* hoursLog.swift */; };
+		F1A065792AEE1AE50060E4E0 /* EditProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A065782AEE1AE50060E4E0 /* EditProfile.swift */; };
+		F1A0657B2AEE1EBD0060E4E0 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A0657A2AEE1EBD0060E4E0 /* PhotoPicker.swift */; };
 		F1C70C9D2A79ACB0005D5E6D /* HP_accountPageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C70C9C2A79ACB0005D5E6D /* HP_accountPageApp.swift */; };
 		F1C70C9F2A79ACB0005D5E6D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C70C9E2A79ACB0005D5E6D /* ContentView.swift */; };
 		F1C70CA12A79ACB1005D5E6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1C70CA02A79ACB1005D5E6D /* Assets.xcassets */; };
@@ -43,6 +48,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F1A065722AED71120060E4E0 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		F1A065742AEDE7E80060E4E0 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		F1A065762AEE00EB0060E4E0 /* hoursLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hoursLog.swift; sourceTree = "<group>"; };
+		F1A065782AEE1AE50060E4E0 /* EditProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfile.swift; sourceTree = "<group>"; };
+		F1A0657A2AEE1EBD0060E4E0 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		F1C70C992A79ACB0005D5E6D /* HP_accountPage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HP_accountPage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1C70C9C2A79ACB0005D5E6D /* HP_accountPageApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HP_accountPageApp.swift; sourceTree = "<group>"; };
 		F1C70C9E2A79ACB0005D5E6D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,6 +101,11 @@
 		F1C70C902A79ACB0005D5E6D = {
 			isa = PBXGroup;
 			children = (
+				F1A0657A2AEE1EBD0060E4E0 /* PhotoPicker.swift */,
+				F1A065782AEE1AE50060E4E0 /* EditProfile.swift */,
+				F1A065762AEE00EB0060E4E0 /* hoursLog.swift */,
+				F1A065742AEDE7E80060E4E0 /* InfoView.swift */,
+				F1A065722AED71120060E4E0 /* File.swift */,
 				F1C70CD52A7C2CB7005D5E6D /* tac.swift */,
 				F1C70CD72A7C2CC0005D5E6D /* pp.swift */,
 				F1C70CCF2A7B4747005D5E6D /* myPosts.swift */,
@@ -292,7 +307,12 @@
 				F1C70CD62A7C2CB8005D5E6D /* tac.swift in Sources */,
 				F1C70CCE2A7B46F2005D5E6D /* Favorites.swift in Sources */,
 				F1C70C9D2A79ACB0005D5E6D /* HP_accountPageApp.swift in Sources */,
+				F1A065732AED71120060E4E0 /* File.swift in Sources */,
+				F1A065752AEDE7E80060E4E0 /* InfoView.swift in Sources */,
 				F1C70CCC2A7B0789005D5E6D /* myImpact.swift in Sources */,
+				F1A0657B2AEE1EBD0060E4E0 /* PhotoPicker.swift in Sources */,
+				F1A065772AEE00EB0060E4E0 /* hoursLog.swift in Sources */,
+				F1A065792AEE1AE50060E4E0 /* EditProfile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,7 +473,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"HP_accountPage/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Account page";
+				INFOPLIST_KEY_CFBundleDisplayName = "Care Collective";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -482,7 +502,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"HP_accountPage/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Account page";
+				INFOPLIST_KEY_CFBundleDisplayName = "Care Collective";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

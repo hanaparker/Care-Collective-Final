@@ -7,181 +7,241 @@
 
 import SwiftUI
 import MapKit
+import PhotosUI
 
-
+final class ok: ObservableObject {
+    
+    @Published var isLiked = false
+}
 
 struct HomeView: View {
+    
     var body: some View {
         
-        VStack (spacing:0){
-            Header()
-            
-            ScrollView(.vertical,showsIndicators: false){
-                stories()
-                
-                Divider()
-                post()
-                Spacer()
-                post(image:"post2",description: "Huge shout out to William Floyd High School for their efforts in raising $2,500 for breast cancer reasearch!")
-                
-            }
-        }
-    }
-}
-
-        
-struct postContent: View{
-    var image: String = "post1"
-    var body: some View{
-        VStack{
-            Image(image)
-                .resizable()
-                .frame(width:.infinity)
-                .aspectRatio(contentMode: .fit)
-            HStack{
-                HStack{
-                    Image(systemName: "heart") //when i click how do i make it go red
-                    Image (systemName: "bubble.left")
-                    Image(systemName:"paperplane")
+        VStack(spacing: 0) {
+                    Header()
+                    ScrollView(.vertical, showsIndicators: false) {
+                        stories()
+                        Spacer()
+                        post()
+                        Spacer()
+                        Spacer()
+                        Divider()
+                        Spacer()
+                        Spacer()
+                        post(image: "post2", description: "Huge shout out to William Floyd High School for their efforts in raising $2,500 for breast cancer research! Find out how you can change the world too through the info button!")
+                    }
                 }
-                Spacer()
-                Image (systemName:"bookmark")
-                Image (systemName:"info.circle")
-                    .resizable()
-                    .frame(width:30, height: 30)
-                    .foregroundColor(.blue) //change color
+                .background(Color(red: 232 / 255, green: 233 / 255, blue: 233 / 255))
             }
-            .padding(.horizontal,12)
-            .padding(.vertical,9)
         }
-    }
-}
-struct post: View{
-    var image: String = "post1"
-    var description: String = "Our worldwide annual Relay For Life event is coming up! Find out how you can participate and even start your own race in your community!"
-    var body: some View{
-        VStack(alignment:.leading,spacing:0.0){
-            postHeader()
-            postContent(image:image)
-            Text("Liked by hanaparker, siri.g, and others")
-                .font(.footnote)
-                .frame(width:.infinity, alignment: .leading)
-                .padding(.horizontal,12)
-                .foregroundColor(.gray)
-            
-            Text (description)
-                .font(.footnote)
-                .frame(width:.infinity, alignment: .leading)
-                .padding(.horizontal, 12)
-            
-            HStack{
-                HStack{
-                    HStack(spacing:7.0){
-                        Image("profile1")
-                            .resizable()
-                            .frame(width: 30,height: 30)
-                            .cornerRadius(50)
-                            .position(x: 25,y:20)
-                        Text("Add Comment...")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .position(x: -35,y:20)
+        
+        struct postContent: View {
+           @ObservedObject var vm = ok()
+            //@State private var isLiked = false // Add a state variable to track whether the heart button is liked
+            @State private var isBookmarked = false // Add a state variable to track whether the bookmark button is bookmarked
+            @State private var showInfoSheet = false // Add a state variable to control the info sheet
+            var image: String = "post1"
+            var body: some View {
+                VStack {
+                    Image(image)
+                        .resizable()
+                        .frame(width: .infinity)
+                        .aspectRatio(contentMode: .fit)
+                    HStack {
+                        Button(action: {
+                            vm.isLiked.toggle()
+                            //vm.isLiked = false
+                            
+                           
+                            
+                            //vm.isLiked = true
+                        }) {
+                            Image(systemName: vm.isLiked ? "heart.fill" : "heart")
+                        }
+                        .foregroundColor(vm.isLiked ? .red : .black)
+                  
+                        
+                        
+                        
+                        
+                        Image(systemName: "bubble.left")
+                        Image(systemName: "paperplane")
+                        Spacer()
+                        Button(action: {
+                            isBookmarked.toggle()
+                        }) {
+                            Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                        }
+                        .foregroundColor(isBookmarked ? .black : .black)
+                        
+                        Button(action: {
+                                            showInfoSheet.toggle() // Toggle the info sheet
+                                        }) {
+                                            Image(systemName: "info.circle")
+                                                .resizable()
+                                                .frame(width: 25, height: 25)
+                                                .foregroundColor(Color(red: 147 / 255, green: 159 / 255, blue: 167 / 255))
+                                        }
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 2)
+                                    .padding(.top, -5)
+                                }
+                .padding(.horizontal, 0)
+                                .sheet(isPresented: $showInfoSheet) {
+                                    InfoView()
+                                }
+                            }
+                        }
+        struct post: View {
+            var image: String = "post1"
+            var description: String = "It's almost time for our worldwide annual Relay For Life event... consider participating in a race or even starting one in your own community!"
+            var body: some View {
+                VStack(alignment: .leading, spacing: 0) {
+                    ZStack(alignment: .topLeading) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color(red: 139 / 255, green: 153 / 255, blue: 131 / 255))
+                            .frame(width:270, height:60)
+                            .offset(y:15)
+                        postHeader()
+                    }
+                    postContent(image: image)
+                    Text("Liked by hanaparker, siri.m, and others")
+                        .font(.footnote)
+                        .frame(width: .infinity, alignment: .leading)
+                        .padding(.horizontal, 12)
+                        .foregroundColor(Color(red: 184 / 255, green: 184 / 255, blue: 184 / 255))
+                    Text(description)
+                        .font(.footnote)
+                        .frame(width: .infinity, alignment: .leading)
+                        .padding(.horizontal, 12)
+                    HStack {
+                        HStack(spacing: 10) {
+                            Image("profile1")
+                                .resizable()
+                                .frame(width: 30, height: 35)
+                                .cornerRadius(5)
+                                .aspectRatio(contentMode: .fill)
+                                .offset(x: 20, y: 5)
+                            HStack {
+                                Text("Add Comment...")
+                                    .font(.caption)
+                                    .foregroundColor(Color(red: 139 / 255, green: 153 / 255, blue: 131 / 255))
+                                    .offset(x: 20, y: 4)
+                                Text("👍")
+                                    .offset(x: 130, y: 2)
+                                Text("👏")
+                                    .offset(x: 130, y: 2)
+                                Text("😍")
+                                    .offset(x: 130, y: 2)
+                                Image(systemName: "plus.circle")
+                                    .foregroundColor(Color(red: 96 / 255, green: 96 / 255, blue: 96 / 255))
+                                    .offset(x: 130, y: 2)
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+            }
+        }
+        struct postHeader: View {
+            var body: some View {
+                HStack {
+                    HStack {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 50)
+                                .frame(width: 55, height: 55)
+                                .foregroundColor(Color(red: 198/255, green: 209/255, blue: 208/255))
+                            Image("profile2")
+                                .resizable()
+                                .frame(width: 50, height: 50, alignment: .center)
+                                .cornerRadius(50)
+                        }
+                        Text("@americancancersociety")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .offset(y: 10)
                     }
                     Spacer()
-                    HStack(alignment: .center){
-                        Text("👍")
-                        Text("👏")
-                        Text("😍")
-                        Image(systemName: "plus.circle")
-                            .foregroundColor(.secondary)
+                    Image("")
+                }
+                .padding(.horizontal, 10)
+            }
+        }
+        struct stories: View {
+                var body: some View {
+                    ZStack {
+                        Color(red: 184 / 255, green: 184 / 255, blue: 184 / 255)
+                            .frame(height: 160)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                Story(image: "profile1", name: "Your Story")
+                                Story(image: "profile7", name: "uncblueridge")
+                                Story(image: "profile8", name: "carolinaeast")
+                                Story(image: "profile3", name: "hanaparker")
+                                Story(image: "profile2", name: "americanca...")
+                                Story(image: "profile4", name: "siri.m")
+                                Story(image: "profile5", name: "atriumhealth")
+                                Story(image: "profile10", name: "novanthealth")
+                                Story(image: "profile6", name: "internetedu...")
+                                Story(image: "profile9", name: "wakemed")
+                                
+                               
+                            }
+                            .padding(.horizontal, 10)
+                        }
+                        .padding(.vertical, 20)
                     }
-                    .padding(.horizontal,12)
-                    .padding(.vertical,9)
                 }
             }
-        }
-    }
-}
-struct postHeader: View{
-    var body: some View{
-        HStack{
-            HStack{
-                Image("profile2")
-                    .resizable()
-                    .frame(width: 30,height: 30,alignment: .center)
-                    .cornerRadius(50)
-                
-                Text("americancancersociety")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                
+        struct Story: View {
+            var image: String = "profile"
+            var name: String = "name"
+            var body: some View {
+                    VStack {
+                        VStack {
+                            Image(image)
+                                .resizable()
+                                .frame(width: 75, height: 90)
+                                .cornerRadius(10)
+                        }
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(LinearGradient(colors: [Color(red: 232 / 255, green: 233 / 255, blue: 233 / 255), Color(red: 198 / 255, green: 209 / 255, blue: 208 / 255), Color(red: 96 / 255, green: 96 / 255, blue: 96 / 255)], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 2)
+                                .frame(width: 80, height: 95) // Adjust the size of the rectangle
+                        )
+                                .frame(width: 85, height: 100) // Adjust the overall frame size
+                        Text(name)
+                            .font(.caption)
+                    }
+                }
             }
-            Spacer()
-            Image("")
-        }
-        .padding(.vertical,10)
-        .padding(.horizontal,8)
-    }
-}
-struct stories: View{
-    var body: some View{
-        ScrollView(.horizontal, showsIndicators:false){
-            HStack(spacing:15.0){
-                Story(image: "gigiUNICEF",name:"Your Story")
-                Story(image: "profile2",name:"americanca...")
-                Story(image: "profile3",name:"hanaparker")
-                Story(image: "profile4",name:"siri.m")
-                Story(image: "profile5",name:"texaschil...")
-            }
-            .padding(.horizontal,8)
-        }
-        .padding(.vertical,10)
-    }
-}
-struct Story: View {
-    var image: String = "profile"
-    var name: String = "name"
-    var body: some View {
-        VStack {
-            VStack{
-                Image(image)
-                    .resizable()
-                    .frame(width: 60, height: 60)
-                    .cornerRadius(30) //
-        }
-            .overlay(
-            Circle()
-                .stroke(LinearGradient(colors: [.blue,.green,.gray], startPoint: .topLeading, endPoint: .bottomTrailing),lineWidth:2)
-                .frame(width:68, height: 68)
-        )
-        .frame(width: 70, height: 70)
-        Text(name)
-            .font(.caption)
-        }
-    }
-}
-struct Header: View {
-    var body: some View {
-        HStack {
-            Image("logo")
-                .resizable()
-                .frame(width: 50, height: 50)
-            Spacer()
-            Text("Your Feed")
-                .bold()
-                .font(.system(size: 24)) //change color
-            
-            
-            HStack(alignment: .center, spacing: 10) {
-                Spacer()
-                Image(systemName:"magnifyingglass")
-                Image(systemName:"message")
-                Image(systemName:"bookmark")
-            }
-            Spacer()
-        }
-        .padding(.horizontal, 15)
-        .padding(.vertical, 3)
+        struct Header: View {
+            var body: some View {
+                HStack {
+                    Image("logo")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                    Spacer()
+                    Text("Explore Opportunities")
+                        .bold()
+                        .font(.system(size: 23))
+                        .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255))
+                    HStack(alignment: .center, spacing: 10) {
+                        Spacer()
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255))
+                        Image(systemName: "message")
+                            .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255))
+                        Image(systemName: "bookmark")
+                            .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255))
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 15)
+                .padding(.vertical, 12)
+                .background(Color(red: 100 / 255, green: 100 / 255, blue: 100 / 255))
     }
 }
 
@@ -192,87 +252,184 @@ struct MapView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                Color("lightGrey") //CHANGED
-                    .ignoresSafeArea()
-                VStack(alignment: .leading, spacing: 20.0) {
-                    Text("Opportunity Map")
-                        .foregroundColor(Color(red: 0.5450980392156862, green: 0.6, blue: 0.5137254901960784))
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.leading)
-                        .padding(.leading)
-                    ZStack {
-                        VStack {
-                            ZStack {
-                                Map(coordinateRegion: $mapRegion)
+                        ZStack {
+                            
+                            Color(red: 232/255, green: 233/255, blue: 233/255)
+                                .ignoresSafeArea()
+                            VStack(alignment: .leading, spacing: 20.0) {
+                                HStack {
+                                            Image("logo")
+                                                .resizable()
+                                                .frame(width: 50, height: 50)
+                                            Spacer()
+                                            Text("Opportunity Map and List")
+                                                .bold()
+                                                .font(.system(size: 23))
+                                                .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255)) // Example custom color
+                                            HStack(alignment: .center, spacing: 10) {
+                                                Spacer()
+                                                
+                                            }
+                                            Spacer()
+                                        }
+                                        .padding(.horizontal, 15)
+                                        .padding(.vertical, 12)
+                                        .background(Color(red: 100 / 255, green: 100 / 255, blue: 100 / 255))
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                                       .fill(Color(red: 139 / 255, green: 153 / 255, blue: 131 / 255))
+                                                       .frame(width:150, height:60)
+                                                       .padding(.leading)
+                                    Text("Map 🗺️")
+                                        .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255))
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.leading)
+                                }
+                                
+                                ZStack {
+                                    VStack {
+                                        ZStack {
+                                            Map(coordinateRegion: $mapRegion)
+                                                
+                                            }
+                                        }
+                                        .padding()
+                                        .background(Color(red: 96/255, green: 96/255, blue: 96/255))
+                                        .cornerRadius(15)
+                                        .padding()
+                                        .font(.footnote)
+                                        
+                                    }
+                                
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                                       .fill(Color(red: 139 / 255, green: 153 / 255, blue: 131 / 255))
+                                                       .frame(width:150, height:60)
+                                                       .padding(.leading)
+                                    Text("List 🗂️")
+                                        .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255))
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.leading)
+                                }
+                                
+                              
+                                    ScrollView(.vertical){
+                                        VStack(spacing: 25){
+                                            
+                                            Menu("> Red Cross Volunteering") {
+                                                Button("Visit Website") {
+                                                    if let url = URL(string: "https://www.redcross.org/") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                    
+                                                }
+                                                Button("Become a Volunteer") {
+                                                    if let url = URL(string: "https://www.redcross.org/volunteer/volunteer-role-finder.html") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                
+                                            }
+                                            .foregroundColor(Color(red: 96/255, green: 96/255, blue: 96/255))
+                                            .padding(.leading)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            Menu("> Medical Justice Alliance") {
+                                                Button("Visit Website") {
+                                                    if let url = URL(string: "https://medicaljusticealliance.org/") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                Button("Apply to Volunteer") {
+                                                    if let url = URL(string: "https://airtable.com/shrJ5dGqTBw1S7Mnn") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                
+                                            }
+                                            .foregroundColor(Color(red: 96/255, green: 96/255, blue: 96/255))
+                                            .padding(.leading)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            Menu("> Baylor Scott and White") {
+                                                Button("Visit Website") {
+                                                    if let url = URL(string: "https://www.bswhealth.com/") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                Button("Apply to Volunteer") {
+                                                    if let url = URL(string: "https://www.bswhealth.com/get-involved/become-a-volunteer") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                
+                                            }
+                                            .foregroundColor(Color(red: 96/255, green: 96/255, blue: 96/255))
+                                            .padding(.leading)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            
+                                            Menu("> Lifelong Medical Care") {
+                                                Button("Visit Website") {
+                                                    if let url = URL(string: "http://lifelongmedicalcare.org/") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                Button("Apply to Volunteer") {
+                                                    if let url = URL(string: "https://lifelongmedical.org/volunteer/") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                
+                                            }
+                                            .foregroundColor(Color(red: 96/255, green: 96/255, blue: 96/255))
+                                            .padding(.leading)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            Menu("> American Cancer Society") {
+                                                Button("Visit Website") {
+                                                    if let url = URL(string: "https://www.cancer.org/") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                            
+                                                }
+                                                Button("Apply to Volunteer") {
+                                                    if let url = URL(string: "https://www.cancer.org/about-us/what-we-do/multicultural/hea.html") {
+                                                        UIApplication.shared.open(url)
+                                                    }
+                                                }
+                                                
+                                            }
+                                            .foregroundColor(Color(red: 96/255, green: 96/255, blue: 96/255))
+                                            .padding(.leading)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            
+                                        }
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                        
+                                        
+                                        
+                                    }
                                     
+                                    
+                                }
+                                
                             }
-                        }
-                        .padding()
-                        .background(.white)
-                        .cornerRadius(15)
-                        .padding()
-                        .font(.footnote)
-                        
-                    }
-                    Text("Opportunity List") //will need to change text to hexcode #939FA7
-                   
-                        .foregroundColor(Color(red: 0.5450980392156862, green: 0.6, blue: 0.5137254901960784))
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.leading)
-                        .padding(.leading)
-                    ScrollView(.vertical){
-                        VStack(spacing: 25){
-                            Link("- Red Cross Volunteering", destination: URL(string: "https://www.redcross.org/volunteer/become-a-volunteer.html#step1")!)
-                                .foregroundColor(Color(red: 0.3764705882352941, green: 0.3764705882352941, blue: 0.3764705882352941))
-                                .padding(.leading)
                             
-                            Link("- Medical Justice Alliance", destination: URL(string: "https://airtable.com/shrJ5dGqTBw1S7Mnn")!)
-                                .foregroundColor(Color(red: 0.3764705882352941, green: 0.3764705882352941, blue: 0.3764705882352941))
-                                .padding(.leading)
-                            
-                            Link("- Baylor Scott and White", destination: URL(string: "https://www.bswhealth.com/get-involved/become-a-volunteer")!)
-                                .foregroundColor(Color(red: 0.3764705882352941, green: 0.3764705882352941, blue: 0.3764705882352941))
-                                .padding(.leading)
-                            
-                            Link("- LifeLong Medical Care", destination: URL(string: "https://lifelongmedical.org/volunteer/")!)
-                                .foregroundColor(Color(red: 0.3764705882352941, green: 0.3764705882352941, blue: 0.3764705882352941))
-                                .padding(.leading)
-                            
-                            Link("- Health Equity Ambassadors", destination: URL(string: "https://www.cancer.org/about-us/what-we-do/multicultural/hea.html")!)
-                                .foregroundColor(Color(red: 0.3764705882352941, green: 0.3764705882352941, blue: 0.3764705882352941))
-                                .padding(.leading)
                         }
                         
                     }
-                    
-                }
-                
-            }
-                
-            .navigationTitle("Map")
-            .foregroundColor(.black)
-        }
+
             
     }
-}
-/*
-struct MapView: View {
-    var body: some View {
-        NavigationView {
-            ZStack{
-                Color.white
-            }
-            
-            .navigationTitle("Map")
-            .foregroundColor(.black)
-        }
-        
-    }
-}
- */
+
+
 
 
 var namesy = "Gigi Hadid"
@@ -364,8 +521,10 @@ struct AccountPage: View {
     @State private var date1 = " "
     
 
-    @State private var name = "Type your name here"
+    @State private var name = "your name"
     @State private var name2 = ""
+    @State private var bio = "your bio"
+    @State private var bio2 = ""
     
     @State private var picture = "greenSquare"
     @State private var picture2 = ""
@@ -373,9 +532,291 @@ struct AccountPage: View {
     @State private var presentPopup = false
     @State private var presentPopup2 = false
     
-
+    @Environment(\.presentationMode) var presentationMode
+    
+    /*
+    let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .long
+            return formatter
+        }()
+*/
+        //@State private var birthDate = Date.now
+        @State private var showhoursLog = false
+    @State private var showEditProfile = false
+    
+    final class PhotoPickerViewModel: ObservableObject {
+        
+        @Published private(set) var selectedImage: UIImage? = nil
+        @Published var imageSelection: PhotosPickerItem? = nil{
+            didSet {
+                setImage(from: imageSelection)
+            }
+        }
+    private func setImage(from selection: PhotosPickerItem?) {
+        guard let selection else { return }
+        
+        Task {
+            if let data = try? await selection.loadTransferable(type: Data.self) {
+                if let uiImage = UIImage(data: data) {
+                    selectedImage = uiImage
+                    
+                    return
+                }
+            }
+        }
+    }
+    }
+    
+    @ObservedObject var vm = ok()
+    
+    var user: ProfileInfo
+    
+        @State public var selectedSkinType = ""
+        @State private var isShowingSkinTypeOptions = false
+        let skinTypeOptions = ["your posts"]
+        
+        @State public var selectedSkinColor = ""
+        @State private var isShowingSkinColorOptions = false
+        let skinColorOptions = ["liked posts"]
+        
+        @State  var selectedSkinConcerns = Set<String>()
+        @State private var isShowingSkinConcernOptions = false
+        @State private var showInfoSheet = false
+    @State private var showPhotoPicker = false
+    
+    @StateObject private var viewModel = PhotoPickerViewModel()
     
     var body: some View {
+        ZStack{
+            Color(red: 232 / 255, green: 233 / 255, blue: 233 / 255)
+                .ignoresSafeArea()
+            
+            VStack() {
+                Text("Your Profile")
+                    .navigationTitle("User")
+                    .font(.title)
+                
+                VStack(spacing: 40) {
+                    if let image = viewModel.selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 200, height: 200)
+                            .cornerRadius(10)
+                            .clipShape(Circle())
+                    } else {
+                        // Display a default image (e.g., "person.circle")
+                        Image(systemName: "person.circle")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 200, height: 200)
+                            .cornerRadius(10)
+                            .clipShape(Circle())
+                    }
+                    
+                    
+                    
+                }
+                
+                
+                
+            
+            
+            Text("\(name)")
+                .font(.title)
+            
+            Text("\(bio)")
+                .font(.title3)
+                
+                PhotosPicker(selection: $viewModel.imageSelection, matching: .images) {
+                Text("change your photo")
+                        }
+            
+            Button("Edit Profile") {
+                
+                presentPopup = true
+            }
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .frame(width: 360, height: 32)
+            .foregroundColor(.black)
+            .overlay{
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color.gray, lineWidth: 1)
+            }
+            .popover(isPresented: $presentPopup, arrowEdge: .bottom) {
+                ZStack{
+                    Color(red: 232 / 255, green: 233 / 255, blue: 233 / 255)
+                        .ignoresSafeArea()
+                    VStack{
+                        Text("Change name here:")
+                            .font(.largeTitle)
+                        
+                        TextField("Name", text: $name2) //bind the property
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        
+                        Button("change"){
+                            name = "\(name2)"
+                            
+                        }
+                        
+                        
+                        .frame(width: 100, height: 100)
+                        
+                        Text("Change bio here:")
+                            .font(.largeTitle)
+                        
+                        TextField("Bio", text: $bio2) //bind the property
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        
+                        Button("change"){
+                            bio = "\(bio2)"
+                            
+                        }
+                        
+                        
+                        .frame(width: 100, height: 100)
+                        
+                        Button(action: {
+                            presentPopup = false
+                        }) {
+                            Text("Done")
+                                .font(.headline)
+                                .fontWeight(.regular)
+                                .padding()
+                                .background(Color (red: 139 / 255, green: 153 / 255, blue: 131 / 255))
+                                .cornerRadius(10)
+                            
+                        }
+                    }
+                }
+            }
+            .padding()
+            
+            
+            
+            
+            
+            
+            
+            //edit profile button
+            /*
+             Button(action: {
+             showEditProfile.toggle() // Toggle the info sheet
+             },label: {
+             Text("Edit Profile")
+             .font(.subheadline)
+             .fontWeight(.semibold)
+             .frame(width: 360, height: 32)
+             .foregroundColor(.black)
+             .overlay{
+             RoundedRectangle(cornerRadius: 6)
+             .stroke(Color.gray, lineWidth: 1)
+             }
+             .sheet(isPresented: $showEditProfile) {
+             EditProfile()
+             }
+             })
+             */
+            Button(action: {
+                showhoursLog.toggle() // Toggle the info sheet
+            }, label: {
+                Text("Log Hours")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .frame(width: 360, height: 32)
+                    .foregroundColor(.black)
+                    .overlay{
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(Color.gray, lineWidth: 1)
+                    }
+            })
+            .sheet(isPresented: $showhoursLog) {
+                hoursLog()
+            }
+            .padding()
+            
+            Divider()
+            
+            ScrollView{
+                ZStack{
+                    Color(red:198 / 255, green: 209 / 255, blue: 208 / 255)
+                    VStack(alignment:.leading){
+                        
+                        ZStack {
+                            
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(red: 139 / 255, green: 153 / 255, blue: 131 / 255))
+                                .frame(width:150, height:40)
+                                .padding()
+                            
+                            HStack{
+                                
+                                Text("Liked Posts:")
+                                Image(systemName: "heart.fill")
+                            }
+                            .foregroundColor(Color(red: 232/255, green: 233/255, blue: 233/255))
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.leading)
+                            .padding(.leading)
+                            
+                        }
+                        
+                        
+                        Spacer()
+                        ScrollView(.vertical){
+                            Color (red: 198 / 255, green: 209 / 255, blue: 208 / 255)
+                            
+                            if(vm.isLiked){
+                                //Text("isLiked: \(vmm.isLiked ? "true" : "false")")
+                                
+                                Button(action: {
+                                    showInfoSheet.toggle() // Toggle the info sheet
+                                }) {
+                                    Image("post1")
+                                        .resizable()
+                                        .frame(width: .infinity)
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 2)
+                                .padding(.top, -5)
+                                .padding(.horizontal, 0)
+                                .sheet(isPresented: $showInfoSheet) {
+                                    InfoView()
+                                }
+                                
+                                Button(action: {
+                                    showInfoSheet.toggle() // Toggle the info sheet
+                                }) {
+                                    Image("post2")
+                                        .resizable()
+                                        .frame(width: .infinity)
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 2)
+                                .padding(.top, -5)
+                                .padding(.horizontal, 0)
+                                .sheet(isPresented: $showInfoSheet) {
+                                    InfoView()
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            Divider()
+        }
+            }
+        
+        
+        /*
         NavigationView {
             ZStack{
                 Color.white
@@ -562,6 +1003,7 @@ struct AccountPage: View {
             
             
         }
+         */
         
     }
 }
@@ -582,11 +1024,12 @@ struct ContentView: View {
                 Text("Map")
             }
             
-            AccountPage()
-            .tabItem {
-                Image(systemName: "person")
-                Text("Account Page")
-            }
+            AccountPage(user: ProfileInfo(name: "diff", skinType: "", skinColor:"", skinConditions: "", imageName: ""))
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("Profile")
+                }
+    
         }
         
         
@@ -636,5 +1079,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+        AccountPage(user: ProfileInfo(name: "diff", skinType: "", skinColor:"", skinConditions: "", imageName: ""))
     }
 }
