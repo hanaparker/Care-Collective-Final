@@ -4,16 +4,22 @@
 //
 //  Created by Hana Parker on 8/1/23.
 //
-
 import SwiftUI
 import MapKit
 import PhotosUI
-
-final class ok: ObservableObject {
-    
+import WebKit
+final class LikedState: ObservableObject {
     @Published var isLiked = false
 }
-
+struct YourApp: App {
+    let likedState = LikedState() // Create an instance of LikedState
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(likedState) // Pass it to the environment
+        }
+    }
+}
 struct HomeView: View {
     
     var body: some View {
@@ -37,7 +43,7 @@ struct HomeView: View {
         }
         
         struct postContent: View {
-           @ObservedObject var vm = ok()
+            @EnvironmentObject var likedState: LikedState
             //@State private var isLiked = false // Add a state variable to track whether the heart button is liked
             @State private var isBookmarked = false // Add a state variable to track whether the bookmark button is bookmarked
             @State private var showInfoSheet = false // Add a state variable to control the info sheet
@@ -50,16 +56,16 @@ struct HomeView: View {
                         .aspectRatio(contentMode: .fit)
                     HStack {
                         Button(action: {
-                            vm.isLiked.toggle()
+                            likedState.isLiked.toggle()
                             //vm.isLiked = false
                             
                            
                             
                             //vm.isLiked = true
                         }) {
-                            Image(systemName: vm.isLiked ? "heart.fill" : "heart")
+                            Image(systemName: likedState.isLiked ? "heart.fill" : "heart")
                         }
-                        .foregroundColor(vm.isLiked ? .red : .black)
+                        .foregroundColor(likedState.isLiked ? .red : .black)
                   
                         
                         
@@ -244,7 +250,6 @@ struct HomeView: View {
                 .background(Color(red: 100 / 255, green: 100 / 255, blue: 100 / 255))
     }
 }
-
         
     
 struct MapView: View {
@@ -425,13 +430,8 @@ struct MapView: View {
                         }
                         
                     }
-
             
     }
-
-
-
-
 var namesy = "Gigi Hadid"
 var newName = " "
 struct circleView : View {
@@ -510,7 +510,6 @@ struct circleView : View {
         }
     }
 }
-
 struct AccountPage: View {
     @State private var org = ""
     @State private var hour = ""
@@ -520,7 +519,6 @@ struct AccountPage: View {
     @State private var hour1 = " "
     @State private var date1 = " "
     
-
     @State private var name = "your name"
     @State private var name2 = ""
     @State private var bio = "your bio"
@@ -532,6 +530,7 @@ struct AccountPage: View {
     @State private var presentPopup = false
     @State private var presentPopup2 = false
     
+    @EnvironmentObject var likedState: LikedState
     @Environment(\.presentationMode) var presentationMode
     
     /*
@@ -568,7 +567,9 @@ struct AccountPage: View {
     }
     }
     
-    @ObservedObject var vm = ok()
+   
+    
+    
     
     var user: ProfileInfo
     
@@ -771,7 +772,7 @@ struct AccountPage: View {
                         ScrollView(.vertical){
                             Color (red: 198 / 255, green: 209 / 255, blue: 208 / 255)
                             
-                            if(vm.isLiked){
+                            if(likedState.isLiked){
                                 //Text("isLiked: \(vmm.isLiked ? "true" : "false")")
                                 
                                 Button(action: {
@@ -975,7 +976,6 @@ struct AccountPage: View {
                                 
                                 Spacer()
                                 
-
                                 /*
                                 HStack{
                                     Button("Settings"){
@@ -1009,8 +1009,12 @@ struct AccountPage: View {
 }
 struct ContentView: View {
     var body: some View {
+        @EnvironmentObject var likedState: LikedState
         
-        TabView{
+        ContentView()
+            .environmentObject(LikedState())
+        
+                TabView{
     
             HomeView()
             .tabItem {
@@ -1075,10 +1079,15 @@ struct ContentView: View {
         
     }
 }
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        @EnvironmentObject var likedState: LikedState
+        
         ContentView()
+            .environmentObject(LikedState())
         AccountPage(user: ProfileInfo(name: "diff", skinType: "", skinColor:"", skinConditions: "", imageName: ""))
+            .environmentObject(LikedState())
     }
 }
+
